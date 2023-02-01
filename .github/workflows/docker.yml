@@ -1,0 +1,37 @@
+name: build and push Docker image to Google Cloud Repository
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup docker buildx
+      uses: docker/setup-buildx-action@v2
+    - name: Setup google cloud auth
+      uses: google-github-actions/auth@v1
+      with:
+        credentials-json: ${{secrets.GCLOUD_KEY}}
+    - name: Setup google cloud sdk
+      uses: google-github-actions/setup-gcloud@v1
+      with:
+        project_id: esirem
+    - name: set docker to use google cloud
+      run: gcloud auth configure-docker
+
+    - name: Build the Docker image
+      uses: docker/build-push-action@v3.2.0
+      with:
+        # dockerfile location
+        file: Dockerfile
+        tags: eu.gcr.io/esirem/test/test:${{ github.ref_name }}
+        # project files
+        context: ./
+        push: true
