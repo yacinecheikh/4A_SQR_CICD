@@ -1,4 +1,4 @@
-name: build and push Docker image to Google Cloud Repository
+name: Docker push to GCR
 
 on:
   push:
