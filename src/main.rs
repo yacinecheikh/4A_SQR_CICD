@@ -2,29 +2,13 @@
 this file was inspired from the Rocket hello world exemple
 */
 
-#[macro_use] extern crate lazy_static;
 #[macro_use] extern crate rocket;
 extern crate core;
 
 
-use std::fmt::format;
-use rocket::http::Method::{Get, Post};
-use rocket::http::Method::{Delete, Put};
-use rocket::http::Status;
-use rocket::response::{Responder, status};
-use rocket::{catcher, Catcher, Data, data, Request, Route, route};
-use rocket::data::Outcome;
-use rocket::outcome::Outcome::Success;
-use rocket::response::status::{Custom, Forbidden};
-use rocket::tokio::io::AsyncReadExt;
-use std::collections::HashMap;
-use std::hash::Hash;
-use std::ptr::null;
-use std::sync::{LockResult, Mutex};
+use std::sync::Mutex;
 use std::time::SystemTime;
 use rocket::form::Form;
-use rocket::response::content::RawJson;
-use rocket::time::Date;
 use rocket::response::status::BadRequest;
 
 
@@ -36,7 +20,7 @@ struct Transaction {
 }
 
 // the lock ensures this mutable global is thread-safe
-static transactions: Mutex<Vec<Transaction>> = Mutex::new(vec![]);
+static TRANSACTIONS: Mutex<Vec<Transaction>> = Mutex::new(vec![]);
 
 
 // helper function
@@ -67,7 +51,7 @@ fn insert(formdata: Form<InsertForm>) -> Result<(), BadRequest<String>> {
         sender: formdata.sender.to_string(),
         amount: formdata.amount.parse().unwrap(),
     };
-    transactions.lock().unwrap().push(transaction);
+    TRANSACTIONS.lock().unwrap().push(transaction);
 
     Ok(())
 }
@@ -80,7 +64,7 @@ fn insert(formdata: Form<InsertForm>) -> Result<(), BadRequest<String>> {
 #[get("/list")]
 fn history() -> String {
     let mut result = String::new();
-    for transaction in transactions.lock().unwrap().iter() {
+    for transaction in TRANSACTIONS.lock().unwrap().iter() {
         let line = format_transaction(transaction) + "\n";
         // line[..] is the slice (type str)
         result.push_str(&line[..]);
@@ -95,7 +79,7 @@ fn history() -> String {
 fn user_history(user: &str) -> String {
     let mut result = String::new();
 
-    for transaction in transactions.lock().unwrap().iter() {
+    for transaction in TRANSACTIONS.lock().unwrap().iter() {
         if transaction.sender == user || transaction.receiver == user {
             let line = format_transaction(transaction) + "\n";
             result.push_str(&line[..]);
@@ -110,7 +94,7 @@ fn user_history(user: &str) -> String {
 
 fn user_balance(user: &str) -> String {
     let mut total = 0;
-    for transaction in transactions.lock().unwrap().iter() {
+    for transaction in TRANSACTIONS.lock().unwrap().iter() {
         if transaction.sender == user {
             total -= transaction.amount
         }
