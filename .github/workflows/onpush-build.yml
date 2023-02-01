@@ -1,6 +1,7 @@
 name: Rust
 
 on:
+  workflow_dispatch:
   push:
     branches: [ "main" ]
 
@@ -15,6 +16,8 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build
+      working-directory: ./rust-rest/
       run: cargo build --verbose
     - name: Run tests
+      working-directory: ./rust-rest/
       run: cargo test --verbose
