@@ -11,11 +11,50 @@ CI/CD repository for SQR students [Ahmed Sguiar](https://github.com/SguiarAhmed)
 
 The Swagger documentation is written in the resources/openapi.yaml file, and can be opened at [The Swagger Website](https://editor.swagger.io/)
 
+## API
+
+### curl examples
+
+#### route /transactions/transaction
+```bash
+curl -X POST localhost:8000/transactions/transaction
+    -d "sender=mybank&receiver=me&amount=1000"
+```
+
+
+#### route /transactions/list
+```bash
+curl -X GET localhost:8000/transactions/list
+```
+```
+1675267138: mybank -> me (1000)
+```
+
+
+#### route /transactions/list/<user>
+```bash
+curl -X GET localhost:8000/transactions/list/me
+```
+```text
+1675267138: mybank -> me (1000)
+```
+
+#### route /transactions/balance/user
+```bash
+curl -X GET localhost:8000/transactions/balance/me
+```
+```text
+1000
+```
+
+
+
+
 ## For the teacher
 
 ### Project choices
 Instead of using Python with Flask, we decided to use Rust with Rocket in order to learn a new programming language.
-For the Dockerfile, we used [this reference](ttps://www.koyeb.com/tutorials/deploy-a-rust-web-app-with-rocket) 
+For the Dockerfile, we used [this reference](ttps://www.koyeb.com/tutorials/deploy-a-rust-web-app-with-rocket)
 We decided to choose the guided project.
 
 ### Loading an example database
