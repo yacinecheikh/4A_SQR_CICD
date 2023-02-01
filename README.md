@@ -57,6 +57,11 @@ Instead of using Python with Flask, we decided to use Rust with Rocket in order 
 For the Dockerfile, we used [this reference](ttps://www.koyeb.com/tutorials/deploy-a-rust-web-app-with-rocket)
 We decided to choose the guided project.
 
+The hashing function used is the standard rust hash algorithm.
+The std::hash module provides a macro to automatically hash any data structure from its memory layout.
+The implementation details can be found [here](https://nnethercote.github.io/2021/12/08/a-brutally-effective-hash-function-in-rust.html)
+
+
 ### Loading an example database
 
 The CSV upload endpoint is currently not available.
