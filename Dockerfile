@@ -2,7 +2,7 @@ FROM rust:1 as builder
 
 COPY . .
 
-RUN cargo install --path
+RUN cargo install --path .
 
 
 FROM debian:buster-slim as runner
