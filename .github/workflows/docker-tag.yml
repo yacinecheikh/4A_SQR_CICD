@@ -33,7 +33,7 @@ jobs:
           # dockerfile location
           file: Dockerfile
           # semver tag
-          tags: eu.gcr.io/esirem/4A_sqr/cheikhrouhou_sguiar/4a_sqr:${{ github.ref_name }}
+          tags: eu.gcr.io/esirem/4a_sqr/cheikhrouhou_sguiar/4a_sqr:${{ github.ref_name }}
           # project files
           context: ./
           push: true
