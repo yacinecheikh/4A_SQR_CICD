@@ -15,11 +15,12 @@ The Swagger documentation is written in the resources/openapi.yaml file, and can
 
 ### Project choices
 Instead of using Python with Flask, we decided to use Rust with Rocket in order to learn a new programming language.
+For the Dockerfile, we used [this reference](ttps://www.koyeb.com/tutorials/deploy-a-rust-web-app-with-rocket) 
 We decided to choose the guided project.
 
 ### Loading an example database
 
-The CSV upload endpoint is not available.
+The CSV upload endpoint is currently not available.
 Instead, the following curl commands can be used to register transactions:
 ```console
 # receive money from the bank
