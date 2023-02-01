@@ -5,6 +5,7 @@ on:
     tags:
       # execute when any tag is found
       - 'v*.*.*'
+    branches: [ "main" ]
 
 jobs:
 
