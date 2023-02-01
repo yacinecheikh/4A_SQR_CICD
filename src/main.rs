@@ -16,7 +16,7 @@ use rocket::response::status::BadRequest;
 
 
 struct Transaction {
-    date: SystemTime,
+    date: u64,
     receiver: String,
     sender: String,
     amount: i64,
@@ -27,6 +27,7 @@ struct Transaction {
 // 'a is a lifetime parameter
 // HashedTransaction is dependant on Transaction
 struct HashedTransaction<'a> {
+    date: u64,
     receiver: &'a String,
     sender: &'a String,
     amount: i64,
@@ -41,7 +42,7 @@ static TRANSACTIONS: Mutex<Vec<Transaction>> = Mutex::new(vec![]);
 fn format_transaction(t: &Transaction) -> String {
     format!("{}: {} -> {} ({})",
             // unwrap() is for Result<Duration, SystemTimeError>
-            t.date.duration_since(SystemTime::UNIX_EPOCH).unwrap().as_secs().to_string(),
+            t.date,
             t.sender,
             t.receiver,
             t.amount)
@@ -49,7 +50,8 @@ fn format_transaction(t: &Transaction) -> String {
 
 fn transaction_hash(t: &Transaction) -> u64 {
     let mut hasher = DefaultHasher::new();
-    let hashed = HashedTransaction{
+    let hashed = HashedTransaction {
+        date: t.date,
         receiver: &t.receiver,
         sender: &t.sender,
         amount: t.amount,
@@ -74,7 +76,8 @@ struct InsertForm<'v> {
 #[post("/transaction", data="<formdata>")]
 fn insert(formdata: Form<InsertForm>) -> Result<(), BadRequest<String>> {
     let mut transaction = Transaction {
-        date: SystemTime::now(),
+        // timestamp
+        date: SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap().as_secs(),
         receiver: formdata.receiver.to_string(),
         sender: formdata.sender.to_string(),
         amount: formdata.amount.parse().unwrap(),
