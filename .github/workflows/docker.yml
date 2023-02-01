@@ -1,8 +1,6 @@
 name: Docker push to GCR
 
 on:
-  push:
-    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
