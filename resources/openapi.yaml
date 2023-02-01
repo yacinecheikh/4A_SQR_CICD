@@ -1,0 +1,146 @@
+openapi: 3.0.3
+info:
+  title: Transact
+  description: |-
+    Documentation for our transaction manager server project.
+    Transact is a Cloud-based, open source transaction management solution, built with modern DevOps pratices and using the Rust programming language.
+    
+    Some useful links:
+    - [Repository](https://github.com/yacinecheikh/4A_SQR_CICD)
+    - [Swagger documentation](https://github.com/yacinecheikh/4A_SQR_CICD/resources/openapi.yaml)
+  contact:
+    email: yacine.cheikhrouhou@yahoo.fr
+  version: 0.1.0
+externalDocs:
+  description: Github
+  url: https://github.com/yacinecheikh/4A_SQR_CICD
+tags:
+  - name: transactions
+    description: database API
+paths:
+  /transactions/transaction:
+    post:
+      tags:
+        - transactions
+      summary: Insert a new transaction
+      description: 'Can be called with: curl -X POST localhost:8000/transactions/transaction -d "sender=mybank&receiver=me&amount=1000"'
+      operationId: insert
+      parameters:
+        - name: sender
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/Sender"
+        - name: receiver
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/Receiver"
+        - name: amount
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/Amount"
+      responses:
+        "200":
+          description:
+            Successful operation.
+            The transaction is accepted even if the sender does not have enough money
+  /transactions/list:
+    get:
+      tags:
+        - transactions
+      summary: Display the transaction history
+      operationId: list
+      responses:
+        "200":
+          description: successful operation
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Transaction"
+  /transactions/{user}:
+    get:
+      tags:
+        - transactions
+      summary: Display user transaction history
+      operationId: user-history
+      parameters:
+        - name: user
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/Receiver"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Transaction"
+  /transactions/balance/{user}:
+    get:
+      tags:
+        - transactions
+      summary: Display the balance of a user
+      operationId: user-balance
+      parameters:
+        - name: user
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/Receiver"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/Amount"
+  /transactions/upload:
+    post:
+      tags:
+        - transactions
+      summary: Upload a CSV transaction database
+      description: Not implemented
+      operationId: upload
+      requestBody:
+        required: true
+        content:
+          application/csv:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  sender:
+                    $ref: "#/components/schemas/Sender"
+                  receiver:
+                    $ref: "#/components/schemas/Receiver"
+                  amount:
+                    $ref: "#/components/schemas/Amount"
+      responses:
+        "200":
+          description: successful operation
+        "400":
+          description: format error in the CSV
+  
+components:
+  schemas:
+    Amount:
+      type: integer
+      format: int64
+      example: 1000
+    Sender:
+      type: string
+      example: mybank
+    Receiver:
+      type: string
+      example: me
+    Transaction:
+      type: string
+      example: "timestamp: sender -> receiver (amount) \n"
