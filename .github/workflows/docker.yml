@@ -29,7 +29,8 @@ jobs:
         with:
           # dockerfile location
           file: Dockerfile
-          tags: eu.gcr.io/esirem/4A_sqr/cheikhrouhou_sguiar/4A_SQR:${{ github.ref_name }}
+          # ref_name is the branch name (main)
+          tags: eu.gcr.io/esirem/4a_sqr/cheikhrouhou_sguiar/4a_sqr:${{ github.ref_name }}
           # project files
           context: ./
           push: true
