@@ -47,6 +47,12 @@ curl -X GET localhost:8000/transactions/balance/me
 1000
 ```
 
+#### route /transactions/integrity_check
+note: this route does not work currently
+the hashing verification always fail, even though the inputs should be the same
+```bash
+curl -X GET localhost:8000/transactions/integrity_check
+```
 
 
 
@@ -54,7 +60,7 @@ curl -X GET localhost:8000/transactions/balance/me
 
 ### Project choices
 Instead of using Python with Flask, we decided to use Rust with Rocket in order to learn a new programming language.
-For the Dockerfile, we used [this reference](ttps://www.koyeb.com/tutorials/deploy-a-rust-web-app-with-rocket)
+For the Dockerfile, we used [this reference](https://www.koyeb.com/tutorials/deploy-a-rust-web-app-with-rocket)
 We decided to choose the guided project.
 
 The hashing function used is the standard rust hash algorithm.
@@ -62,11 +68,12 @@ The std::hash module provides a macro to automatically hash any data structure f
 The implementation details can be found [here](https://nnethercote.github.io/2021/12/08/a-brutally-effective-hash-function-in-rust.html)
 
 
+
 ### Loading an example database
 
 The CSV upload endpoint is currently not available.
 Instead, the following curl commands can be used to register transactions:
-```console
+```bash
 # receive money from the bank
 curl localhost:8000 -X POST -d "sender=mybank&receiver=me&amount=1000"
 # receive double the amount by mistake
