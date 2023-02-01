@@ -139,8 +139,25 @@ fn user_balance(user: &str) -> String {
 // E5: Importer des données depuis un fichier csv. (à documenter)
 // pas encore fait
 
+// E6: vérification de l'intégrité des hash enregistrés
+#[get("/integrity_check")]
+fn check_integrity() -> String {
+    let mut result = "ok".to_string();
+    for transaction in TRANSACTIONS.lock().unwrap().iter() {
+        if transaction_hash(transaction) != transaction.hash {
+            result = "fail".to_string()
+        }
+    }
+    result
+}
+
+
 #[launch]
 fn rocket() -> _ {
     rocket::build()
-        .mount("/transactions/", routes![history, user_history, insert, user_balance])
+        .mount("/transactions/", routes![
+            history, user_history,
+            insert, user_balance,
+            check_integrity,
+        ])
 }
