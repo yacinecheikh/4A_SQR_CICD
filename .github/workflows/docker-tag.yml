@@ -1,0 +1,39 @@
+name: Docker push when a new semver tag is set
+
+on:
+  push:
+    tags:
+      # execute when any tag is found
+      - '*'
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup docker buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Setup google cloud auth
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{secrets.GCLOUD_KEY}}
+      - name: Setup google cloud sdk
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: esirem
+      - name: set docker to use google cloud
+        run: gcloud auth configure-docker
+
+      - name: Build the Docker image
+        uses: docker/build-push-action@v3.2.0
+        with:
+          # dockerfile location
+          file: Dockerfile
+          # semver tag
+          tags: eu.gcr.io/esirem/4A_sqr/cheikhrouhou_sguiar/4A_SQR:${{ github.ref_name }}
+          # project files
+          context: ./
+          push: true
