@@ -3,6 +3,7 @@ CI/CD repository for SQR students [Ahmed Sguiar](https://github.com/SguiarAhmed)
 
 [![forthebadge made-with-rust](http://ForTheBadge.com/images/badges/made-with-rust.svg)](https://www.rust-lang.org)
 
+Le projet de CI/CD est un [![](https://img.shields.io/badge/PROJET_TERMINÉ_🚀-059142?style=for-the-badge&logoColor=white)](https://dev.to/envoy_/150-badges-for-github-pnk) 
 
 ### CI Badges
 
